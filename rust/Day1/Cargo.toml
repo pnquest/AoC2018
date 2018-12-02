@@ -4,3 +4,4 @@ version = "0.1.0"
 authors = ["pnquest <pn.quest@gmail.com>"]
 
 [dependencies]
+common = {path = "../common"}

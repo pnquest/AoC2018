@@ -333,3 +333,4 @@ ASALocalRun/
 rust/**/target/
 Cargo.lock
 **/*.rs.bk
+.vscode

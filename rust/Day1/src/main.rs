@@ -1,22 +1,9 @@
-use std::fs::File;
-use std::io::BufReader;
-use std::io::BufRead;
+extern crate common;
 use std::collections::HashSet;
 
 fn main() {
-    let f = File::open("input.txt").expect("file not foud");
-
-    let buf = BufReader::new(&f);
-    let mut rows: Vec<isize> = Vec::new();
-
-    for line in buf.lines() {
-        if let Ok(v) = line {
-            rows.push(v.parse().expect("could not parse line"));
-        }
-        else {
-            panic!("failed to parse line!")
-        }
-    }
+    let rows = common::file_to_vector("input.txt")
+        .unwrap();
 
     part_1(&rows);
     part_2(&rows);
