@@ -6,3 +6,4 @@ authors = ["pnquest <pn.quest@gmail.com>"]
 [dependencies]
 common = {path = "../common"}
 itertools = "0.7"
+stopwatch = "0.0.7"

@@ -1,7 +1,9 @@
 extern crate common;
 #[macro_use]
 extern crate itertools;
+extern crate stopwatch;
 
+use stopwatch::Stopwatch;
 use std::collections::HashMap;
 
 struct Counts {
@@ -10,10 +12,13 @@ struct Counts {
 }
 
 fn main() {
+    let mut sw = Stopwatch::start_new();
     let items = common::file_to_vector("./input.txt").unwrap();
 
     part_1(&items);
     part_2(&items);
+    sw.stop();
+    println!("Elapsed: {}", sw.elapsed_ms());
 }
 
 fn part_1(items: &Vec<String>) {
@@ -32,16 +37,16 @@ fn part_1(items: &Vec<String>) {
                 acc
             });
 
-            let (twos_and_threes, _): (Vec<usize>, _) =
-                grouped.values().partition(|&c| *c == 2 || *c == 3);
+            let (twos, threes): (Vec<usize>, Vec<usize>) =
+                grouped.values()
+                .filter(|&c| *c == 2 || *c == 3)
+                .partition(|&c| *c == 2);
 
-            let vals = &twos_and_threes;
-
-            let two_count = match vals.into_iter().any(|&c| c == 2) {
+            let two_count = match twos.len() > 0 {
                 true => 1,
                 false => 0,
             };
-            let three_count = match vals.into_iter().any(|&c| c == 3) {
+            let three_count = match threes.len() > 0 {
                 true => 1,
                 false => 0,
             };
@@ -68,7 +73,10 @@ fn part_2(items: &Vec<String>) {
             let chars1 = s1.chars();
             let chars2 = s2.chars();
 
-            let diff = chars1.zip(chars2).filter(|(c1, c2)| c1 != c2).count();
+            let diff = chars1
+                .zip(chars2)
+                .filter(|(c1, c2)| c1 != c2)
+                .count();
 
             diff == 1
         }).unwrap();
@@ -78,8 +86,12 @@ fn part_2(items: &Vec<String>) {
     let matching: String = sku1
         .chars()
         .zip(sku2.chars())
-        .filter(|(c1, c2)| c1 == c2)
-        .map(|(c1, _)| c1)
+        .filter_map(|(c1, c2)| {
+            if c1 == c2 {
+                return Some(c1);
+            }
+            None
+        })
         .collect();
 
     println!("The matching portion is {}", matching);

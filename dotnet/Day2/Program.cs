@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Day2
 {
@@ -9,8 +10,14 @@ namespace Day2
     {
         static void Main(string[] args)
         {
+            Stopwatch stp = new Stopwatch();
+
+            stp.Start();
             Part1();
             Part2();
+            stp.Stop();
+            Console.WriteLine($"Elapsed: {stp.ElapsedMilliseconds}");
+            Console.ReadKey(true);
         }
 
         private static void Part2()
