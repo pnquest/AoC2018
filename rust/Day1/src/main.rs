@@ -1,12 +1,16 @@
 extern crate common;
+extern crate stopwatch;
 use std::collections::HashSet;
+use stopwatch::Stopwatch;
 
 fn main() {
     let rows = common::file_to_vector("input.txt")
         .unwrap();
 
+    let sw = Stopwatch::start_new();
     part_1(&rows);
     part_2(&rows);
+    println!("took {}", sw.elapsed_ms());
 }
 
 fn part_1(values: &Vec<isize>) {

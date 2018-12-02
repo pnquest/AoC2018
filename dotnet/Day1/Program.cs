@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Day1
 {
@@ -9,9 +10,13 @@ namespace Day1
     {
         static void Main(string[] args)
         {
+            Stopwatch stp = new Stopwatch();
+            stp.Start();
             long[] values = File.ReadAllText("./input.txt").Split("\n").Select(s => long.Parse(s)).ToArray();
             Part1(values);
             Part2(values);
+            stp.Stop();
+            Console.WriteLine(stp.ElapsedMilliseconds);
         }
 
         private static void Part1(long[] values)
