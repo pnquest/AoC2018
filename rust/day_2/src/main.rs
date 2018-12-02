@@ -24,13 +24,7 @@ fn part_1(items:&Vec<String>) {
             let mut grouped: HashMap<char, usize> = HashMap::new();
 
             v.chars().into_iter().fold(&mut grouped, |acc, c| {
-                if acc.contains_key(&c) {
-                    *acc.get_mut(&c).unwrap() += 1;
-                }
-                else {
-                    acc.insert(c, 1);
-                }
-
+                *acc.entry(c).or_insert(0) += 1;
                 acc
             });
 
