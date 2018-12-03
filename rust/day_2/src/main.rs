@@ -22,17 +22,10 @@ fn main() {
 }
 
 fn part_1(items: &Vec<String>) {
-    let mut totals = Counts {
-        two_count: 0,
-        three_count: 0,
-    };
-
-    items
+    let totals = items
         .into_iter()
         .map(|v| {
-            let mut grouped: HashMap<char, usize> = HashMap::new();
-
-            v.chars().into_iter().fold(&mut grouped, |acc, c| {
+            let grouped = v.chars().into_iter().fold(HashMap::new(), |mut acc, c| {
                 *acc.entry(c).or_insert(0) += 1;
                 acc
             });
@@ -52,7 +45,7 @@ fn part_1(items: &Vec<String>) {
             };
 
             (two_count, three_count)
-        }).fold(&mut totals, |acc, c| {
+        }).fold(Counts {two_count:0, three_count:0}, |mut acc, c| {
             let (two, three) = c;
             acc.two_count += two;
             acc.three_count += three;
