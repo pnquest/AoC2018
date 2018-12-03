@@ -16,9 +16,13 @@ fn main() {
     let input:Vec<String> = common::file_to_vector("input.txt").unwrap();
     let re = Regex::new(r"^#(\d+) @ (\d+),(\d+): (\d+)x(\d+)$").unwrap();
     let rects= input.into_iter().map(|s| convert_string(s, &re)).collect();
-    part_1(&rects);
+    //found a much better way of doing this after the fact. 
+    //This is that way. part_1 is my original solution
+    part_1_array(&rects); 
+    
     part_2(&rects);
     sw.stop();
+    part_1(&rects);
     println!("Runtime: {}", sw.elapsed_ms());
 }
 
@@ -34,6 +38,27 @@ fn convert_string(s:String, re:&Regex) -> Entry {
         }
 
         Entry{id: 0, area: Rectangle::new(0,0,0,0)}
+}
+
+fn part_1_array(entries:&Vec<Entry>) {
+    let mut matrix:Vec<Vec<u8>> = vec![vec![0;1000]; 1000];
+
+    for e in entries {
+        for x in e.area.left..e.area.get_right() {
+            for y in e.area.top..e.area.get_bottom() {
+                matrix[x][y] += 1;
+            }
+        }
+    }
+
+    let answer = matrix
+        .into_iter()
+        .map(|a| a.into_iter())
+        .flatten()
+        .filter(|&v| v > 1)
+        .count();
+
+    println!("The count is {}", answer);
 }
 
 fn part_1(entries:&Vec<Entry>){
