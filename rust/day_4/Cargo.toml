@@ -1,5 +1,5 @@
 [package]
-name = "day_3"
+name = "day_4"
 version = "0.1.0"
 authors = ["pnquest <pn.quest@gmail.com>"]
 
@@ -7,4 +7,4 @@ authors = ["pnquest <pn.quest@gmail.com>"]
 common = {path = "../common"}
 stopwatch = "0.0.7"
 regex = "1"
-itertools = "0.7"
+chrono = "0.4"

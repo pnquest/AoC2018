@@ -1,6 +1,7 @@
 extern crate common;
 extern crate stopwatch;
 extern crate regex;
+extern crate itertools;
 use stopwatch::Stopwatch;
 use regex::Regex;
 use common::geometry::Rectangle;
