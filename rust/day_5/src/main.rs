@@ -22,6 +22,7 @@ fn main() {
 fn part_2(input: &Vec<char>) {
     let mut min_len = 999999999;
 
+//ascii A..Z
     for ci in 65..90 {
         let c = std::char::from_u32(ci).unwrap();
         let mut v = input.iter()

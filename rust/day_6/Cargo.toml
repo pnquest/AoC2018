@@ -1,7 +1,9 @@
 [package]
-name = "day_5"
+name = "day_6"
 version = "0.1.0"
 authors = ["pnquest <pn.quest@gmail.com>"]
 
 [dependencies]
+common = {path = "../common"}
 stopwatch = "0.0.7"
+itertools = "0.7"
