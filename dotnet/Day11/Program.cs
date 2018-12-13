@@ -80,32 +80,7 @@ namespace Day11
 
         private static void Part2SummedAreaTable(long[,] values)
         {
-            long[,] sat = new long[300, 300];
-
-            for(int x = 0; x < 300; x++)
-            {
-                for(int y = 0; y < 300; y++)
-                {
-                    long node = values[x, y];
-
-                    if(y > 0)
-                    {
-                        node += sat[x, y - 1];
-                    }
-
-                    if(x > 0)
-                    {
-                        node += sat[x - 1, y];
-                    }
-
-                    if(x > 0 && y > 0)
-                    {
-                        node -= sat[x - 1, y - 1];
-                    }
-
-                    sat[x, y] = node;
-                }
-            }
+            long[,] sat = ComputeSummedAreaTable(values);
 
             Point? maxPiont = null;
             long? maxValue = null;
@@ -131,8 +106,8 @@ namespace Day11
                             iA = sat[a.X, a.Y];
                         }
 
-                        long iB = 0; 
-                        if(b.X >= 0 && b.Y >= 0)
+                        long iB = 0;
+                        if (b.X >= 0 && b.Y >= 0)
                         {
                             iB = sat[b.X, b.Y];
                         }
@@ -154,7 +129,7 @@ namespace Day11
                 }
             }
 
-            if(sat[299,299] > maxValue.Value)
+            if (sat[299, 299] > maxValue.Value)
             {
                 maxPiont = new Point(0, 0);
                 maxValue = sat[299, 299];
@@ -162,6 +137,38 @@ namespace Day11
             }
 
             Console.WriteLine($"Part 2 (SAT): {maxPiont.Value.X},{maxPiont.Value.Y},{maxSize.Value} {maxValue.Value}");
+        }
+
+        private static long[,] ComputeSummedAreaTable(long[,] values)
+        {
+            long[,] sat = new long[300, 300];
+
+            for (int x = 0; x < 300; x++)
+            {
+                for (int y = 0; y < 300; y++)
+                {
+                    long node = values[x, y];
+
+                    if (y > 0)
+                    {
+                        node += sat[x, y - 1];
+                    }
+
+                    if (x > 0)
+                    {
+                        node += sat[x - 1, y];
+                    }
+
+                    if (x > 0 && y > 0)
+                    {
+                        node -= sat[x - 1, y - 1];
+                    }
+
+                    sat[x, y] = node;
+                }
+            }
+
+            return sat;
         }
 
         private static void Part1(long[,] values)
