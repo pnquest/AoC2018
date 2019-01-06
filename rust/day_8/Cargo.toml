@@ -1,0 +1,9 @@
+[package]
+name = "day_8"
+version = "0.1.0"
+authors = ["pnquest <pn.quest@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+common = {path = "../common"}
+nom = "4.1.1"
