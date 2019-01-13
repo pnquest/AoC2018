@@ -5,6 +5,7 @@ use std::str;
 
 pub mod geometry;
 pub mod collections;
+pub mod summed_area;
 
 pub fn file_to_vector<T: str::FromStr>(file_name: &str) -> Result<Vec<T>, String>{
     let mut f = match File::open(file_name) {
