@@ -1,9 +1,9 @@
 pub struct SummedAreaTable {
-    pub table: Vec<Vec<usize>>
+    pub table: Vec<Vec<isize>>
 }
 
 impl SummedAreaTable {
-    pub fn from_vec(v: Vec<Vec<usize>>) -> SummedAreaTable {
+    pub fn from_vec(v: &Vec<Vec<isize>>) -> SummedAreaTable {
         let outer_size = v.len();
         let inner_size = v[0].len();
         let mut t = vec![vec![0; inner_size]; outer_size];
@@ -31,7 +31,7 @@ impl SummedAreaTable {
         SummedAreaTable{table: t}
     }
 
-    pub fn compute_sum(&self, x: isize, y: isize, w: isize, h: isize) -> usize {
+    pub fn compute_sum(&self, x: isize, y: isize, w: isize, h: isize) -> isize {
         let (dx, dy) = (x + w - 1, y + h - 1);
         let (ax, ay) = (dx - w, dy - h);
         let (bx, by) = (dx, dy - h);
@@ -73,7 +73,7 @@ mod tests {
             vec![36, 25, 18, 19, 7, 6]
         ];
 
-        let sat = SummedAreaTable::from_vec(v);
+        let sat = SummedAreaTable::from_vec(&v);
 
         let sum = sat.compute_sum(2, 3, 3, 2);
 
@@ -91,7 +91,7 @@ mod tests {
             vec![36, 25, 18, 19, 7, 6]
         ];
 
-        let sat = SummedAreaTable::from_vec(v);
+        let sat = SummedAreaTable::from_vec(&v);
 
         let sum = sat.compute_sum(0, 0, 6, 6);
 
