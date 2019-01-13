@@ -80,4 +80,22 @@ mod tests {
         assert_eq!(sum, 111);
     }
 
+    #[test]
+    fn sums_work_full() {
+        let v = vec![
+            vec![31, 12, 13, 24, 30, 1],
+            vec![2, 26, 17, 23, 8, 35],
+            vec![4, 9, 21, 15, 28, 34],
+            vec![33, 10, 22, 16, 27, 3],
+            vec![5, 29, 20, 14, 11, 32],
+            vec![36, 25, 18, 19, 7, 6]
+        ];
+
+        let sat = SummedAreaTable::from_vec(v);
+
+        let sum = sat.compute_sum(0, 0, 6, 6);
+
+        assert_eq!(sum, 666);
+    }
+
 }
