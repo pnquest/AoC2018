@@ -19,13 +19,19 @@ fn main() {
     f.read_to_string(&mut contents).expect("could not read file");
     let inp = contents;
 
+    part_1(&inp);
+    part_2();
+    
+}
+
+fn part_1(inp: &str) {
     let (rest, st) = first_line(CompleteStr::from(&inp[..])).unwrap();
     let mut state: Vec<Pot> = st.chars().enumerate().map(|(i, c)| Pot {index: i as i64, value: c}).collect();
 
     let (_,map) = rows(rest).unwrap();
 
-    print_pots(&state);
-    for _ in 0..20 {
+    print_pots(0, &state);
+    for i in 0..20 {
 
         pad_pots(&mut state);
 
@@ -44,16 +50,30 @@ fn main() {
 
         state = cp;
         trim_pots(&mut state);
-        print_pots(&state);
+        print_pots(i + 1, &state);
     }
-    let count: i64 = state.iter().filter_map(|p| {
+    let count = score_pots(&state);
+    println!("part 1: {}", count);
+}
+
+fn part_2() {
+    let start_count = 21010;
+    let start_score = 1303275;
+    let score_rate = 62; //if you let the loop run long enough it stabilizes at +62 per generation
+
+    let score_diff = (50000000000i64 - start_count) * score_rate;
+    let score = start_score + score_diff;
+    println!("part 2: {}", score);
+}
+
+fn score_pots(pots: &Vec<Pot>) -> i64 {
+    pots.iter().filter_map(|p| {
         if p.value == '#' {
             return Some(p.index)
         }
 
         None
-    }).sum();
-    println!("part 1: {}", count);
+    }).sum()
 }
 
 fn trim_pots(pots: &mut Vec<Pot>) {
@@ -76,7 +96,9 @@ fn trim_pots(pots: &mut Vec<Pot>) {
     }
 }
 
-fn print_pots(pots: &Vec<Pot>) {
+fn print_pots(iter: i64, pots: &Vec<Pot>) {
+    let score = score_pots(pots);
+    print!("{} ({}): ", iter, score);
     for p in pots {
         print!("{}", p.value);
     }
