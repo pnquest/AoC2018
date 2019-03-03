@@ -1,3 +1,27 @@
+use std::cmp::Ordering;
+
+#[derive(Eq, PartialEq, Hash, Clone, Copy)]
+pub struct Point {
+    pub x: usize,
+    pub y: usize
+}
+
+impl Ord for Point {
+    fn cmp(&self, other: &Point) -> Ordering {
+        let cy = self.y.cmp(&other.y);
+        match cy {
+            Ordering::Equal => self.x.cmp(&other.x),
+            _ => cy
+        }
+    }
+}
+
+impl PartialOrd for Point {
+    fn partial_cmp(&self, other: &Point) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
 #[derive(PartialEq, PartialOrd)]
 pub struct Rectangle {
     pub left: usize,

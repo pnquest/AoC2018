@@ -1,7 +1,9 @@
+extern crate common;
+use common::geometry::Point;
+
 use std::io::{BufRead, BufReader};
 use std::fs::File;
 use std::collections::HashMap;
-use std::cmp::Ordering;
 
 enum Track {
     Vertical,
@@ -30,28 +32,6 @@ struct Cart {
     next_turn: NextTurn,
     pos_x: usize,
     pos_y: usize
-}
-
-#[derive(Eq, PartialEq, Hash, Clone, Copy)]
-struct Point {
-    x: usize,
-    y: usize
-}
-
-impl Ord for Point {
-    fn cmp(&self, other: &Point) -> Ordering {
-        let cy = self.y.cmp(&other.y);
-        match cy {
-            Ordering::Equal => self.x.cmp(&other.x),
-            _ => cy
-        }
-    }
-}
-
-impl PartialOrd for Point {
-    fn partial_cmp(&self, other: &Point) -> Option<Ordering> {
-        Some(self.cmp(other))
-    }
 }
 
 impl Cart {
