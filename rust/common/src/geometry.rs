@@ -22,6 +22,13 @@ impl PartialOrd for Point {
     }
 }
 
+impl Point {
+    pub fn manhattan_distance(&self, other: &Point) -> usize {
+        let res = (self.x as isize - other.x as isize) + (self.y as isize - other.y as isize);
+        res.abs() as usize
+    }
+}
+
 #[derive(PartialEq, PartialOrd)]
 pub struct Rectangle {
     pub left: usize,
