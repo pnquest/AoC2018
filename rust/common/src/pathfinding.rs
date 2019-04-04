@@ -50,11 +50,24 @@ enum SearchResult {
     None
 }
 
+fn unwrap_nodes(node: &Rc<Node>) -> Vec<Point> {
+    let mut ret = Vec::new();
+
+    ret.push(node.coordinate.extract());
+    if let Some(ref n) = node.parent {
+        ret.append(&mut unwrap_nodes(n));
+    }
+    ret
+}
+
 pub fn solve_map(map: &Map, start: Point, goal: Point) -> Option<Vec<Point>> {
     let start_space = map[start.x][start.y];
     
     let start = Node::new(start_space, 0, start.manhattan_distance(&goal), None);
 
+    let max_x = map.len() as isize;
+    let max_y = map[0].len() as isize;
+    let moves_vec = vec![-1,1,0];
 
     let mut closed: Vec<Rc<Node>> = Vec::new();
     let mut open = vec![Rc::new(start)];
@@ -68,11 +81,14 @@ pub fn solve_map(map: &Map, start: Point, goal: Point) -> Option<Vec<Point>> {
         if let Some((idx, val)) = smallest {
             open.remove(idx);
             let pt = val.coordinate.extract();
-            for x in -1..=1 {
+            for x in moves_vec.clone() {
                 for y in -1..=1 {
                     if (x == 0 || y == 0) 
+                        && !(x == 0  && y == 0)
                         && x + pt.x as isize >= 0 
-                        && y + pt.y as isize >= 0 {
+                        && y + pt.y as isize >= 0 
+                        && x + (pt.x as isize) < max_x
+                        && y + (pt.y as isize) < max_y{
                         
                         let sp = map[(x + pt.x as isize) as usize][(y + pt.y as isize) as usize];
 
@@ -99,17 +115,7 @@ pub fn solve_map(map: &Map, start: Point, goal: Point) -> Option<Vec<Point>> {
                                 }
                             },
                             SearchResult::Found(n) => {
-                                let mut res: Vec<Point> = Vec::new();
-                                let mut nxt = Rc::new(n);
-                                loop {
-                                    res.push(nxt.coordinate.extract());
-                                    if let Some(ref nv) = nxt.parent {
-                                        nxt = Rc::clone(&nv);
-                                    }
-                                    else {
-                                        return Some(res);
-                                    }
-                                }
+                                return Some(unwrap_nodes(&Rc::new(n)));
                             },
                             SearchResult::None => {}
                         }
@@ -121,5 +127,46 @@ pub fn solve_map(map: &Map, start: Point, goal: Point) -> Option<Vec<Point>> {
         } else {
             return None;
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn basic_case() {
+        let input = vec![Space::Start(Point{x:0, y:0}), Space::Open(Point{x:0,y:1}), Space::Goal(Point{x:0, y:2})];
+        let ip2:Map = vec![input];
+
+        let result = solve_map(&ip2, Point{x:0, y:0}, Point{x:0, y:2}).unwrap();
+
+        for p in result {
+            println!("{},{}",p.x, p.y );
+        }
+    }
+
+    #[test]
+    fn blocked_case() {
+        let input = vec![Space::Start(Point{x:0, y:0}), Space::Open(Point{x:0,y:1}), Space::Blocked(Point{x:0,y:2}), Space::Goal(Point{x:0, y:3})];
+        let input2 = vec![Space::Open(Point{x:1, y:0}), Space::Open(Point{x:1,y:1}), Space::Open(Point{x:1, y:2}), Space::Open(Point{x:1, y:3})];
+        let ip2:Map = vec![input, input2];
+
+        let result = solve_map(&ip2, Point{x:0, y:0}, Point{x:0, y:3}).unwrap();
+
+        for p in result {
+            println!("{},{}",p.x, p.y );
+        }
+    }
+
+    #[test]
+    fn full_block_case() {
+        let input = vec![Space::Start(Point{x:0, y:0}), Space::Open(Point{x:0,y:1}), Space::Blocked(Point{x:0,y:2}), Space::Goal(Point{x:0, y:3})];
+        let input2 = vec![Space::Open(Point{x:1, y:0}), Space::Open(Point{x:1,y:1}), Space::Blocked(Point{x:1, y:2}), Space::Open(Point{x:1, y:3})];
+        let ip2:Map = vec![input, input2];
+
+        let result = solve_map(&ip2, Point{x:0, y:0}, Point{x:0, y:3});
+
+        assert!(result.is_none());
     }
 }
